@@ -14,15 +14,15 @@
       <div class="start">
         <div class="date">
           <span class="tip">入住</span>
-          <span class="time">{{ startDate }}</span>
+          <span class="time">{{ startDateStr }}</span>
         </div>
-        <div class="stay">共{{ stayDate }}晚</div>
+        <div class="stay">共{{ stayCount }}晚</div>
       </div>
 
       <div class="end">
         <div class="date">
           <span class="tip">离店</span>
-          <span class="time">{{ endDate }}</span>
+          <span class="time">{{ endDateStr }}</span>
         </div>
       </div>
     </div>
@@ -62,20 +62,14 @@
 
 <script setup>
 import useCityStore from "@/stores/modules/city";
-import { ref } from "vue";
+import useMainStore from '@/stores/modules/main';
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import useHomeStore from '@/stores/modules/home'
 import { formatMonthDay, getDiffDats } from "@/utils/format_date";
 
 const router = useRouter();
-
-// defineProps({
-//   hotSuggests: {
-//     type: Array,
-//     default: () => [],
-//   },
-// });
 
 const cityClick = () => {
   router.push("/city");
@@ -99,19 +93,22 @@ const CityStore = useCityStore();
 const { currentCity } = storeToRefs(CityStore);
 
 //日期范围的处理
-const nowDate = new Date();
-const tomorrowDate = new Date().setDate(nowDate.getDate() + 1);
-const startDate = ref(formatMonthDay(nowDate));
-const endDate = ref(formatMonthDay(tomorrowDate));
-const stayDate = ref(getDiffDats(nowDate, tomorrowDate));
+
+const mainStore = useMainStore()
+const {startDate, endDate } = storeToRefs(mainStore)
+
+const startDateStr = computed(() => formatMonthDay(startDate.value))
+const endDateStr = computed(() => formatMonthDay(endDate.value))
+const stayCount = ref(getDiffDats(startDate.value, endDate.value));
 
 const showCalendar = ref(false);
 const onConfirm = (value) => {
   const seletStartDate = value[0];
   const seletEndDate = value[1];
-  startDate.value = formatMonthDay(seletStartDate);
-  endDate.value = formatMonthDay(seletEndDate);
-  stayDate.value = ref(getDiffDats(seletStartDate, seletEndDate));
+  mainStore.startDate = seletStartDate;
+  mainStore.endDate = seletEndDate;
+  stayCount.value = getDiffDats(seletStartDate, seletEndDate);
+
   showCalendar.value = false;
 };
 

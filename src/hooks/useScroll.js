@@ -1,4 +1,5 @@
 import { onMounted, onUnmounted, ref } from "vue";
+import { throttle } from 'underscore'
 //方法一调用时传入回调函数
 // export default function useScroll(reachBottomCB) {
 //   const scrollListenerHandler = () => {
@@ -23,20 +24,20 @@ import { onMounted, onUnmounted, ref } from "vue";
 // useScroll(() => {
 //   homeStore.fetchHoselistData();
 // })
-
+//防抖/节流
 export default function useScroll() {
   const isReachBottom = ref(false)
   const scrollTop = ref(0)
   const clientHeight = ref(0)
   const scrollHeight = ref(0)
-  const scrollListenerHandler = () => {
+  const scrollListenerHandler = throttle(() => {
     clientHeight.value = document.documentElement.clientHeight;
     scrollTop.value = document.documentElement.scrollTop;
     scrollHeight.value = document.documentElement.scrollHeight;
     if (clientHeight.value + scrollTop.value >= scrollHeight.value) {
       isReachBottom.value = true
     }
-  };
+  },100)
   onMounted(() => {
     window.addEventListener("scroll", scrollListenerHandler);
   });

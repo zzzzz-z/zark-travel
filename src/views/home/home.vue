@@ -7,20 +7,21 @@
     <home-search></home-search>
     <home-categories></home-categories>
     <div class="search-bar" v-if="isShowSearchBar">
-      zark
+      <search-bar></search-bar>
     </div>
     <home-content></home-content>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import useHomeStore from "@/stores/modules/home";
 import navBar from "./cpns/nav-bar.vue";
 import HomeSearch from "./cpns/home-search.vue";
 import HomeCategories from "./cpns/home-categories.vue";
 import HomeContent from "./cpns/home-content.vue";
 import useScroll from '@/hooks/useScroll'
+import searchBar from '@/components/search-bar/search-bar.vue'
 
 const homeStore = useHomeStore();
 homeStore.fetchSuggestsData();
@@ -39,9 +40,8 @@ watch(isReachBottom, (newValue) => {
  })
 
 //搜索框控制是否显示
-const isShowSearchBar = ref(false)
-watch((scrollTop), (newValue) => {
-  isShowSearchBar.value = newValue > 100
+const isShowSearchBar = computed(() => {
+  return scrollTop.value >= 350
 })
 </script>
 
@@ -52,6 +52,16 @@ watch((scrollTop), (newValue) => {
     img {
       width: 100%;
     }
+  }
+  .search-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    padding: 16px 16px 10px;
+    background: #fff;
+    z-index: 10;
   }
 }
 </style>

@@ -19,7 +19,6 @@ const useHomeStore = defineStore('home', {
     },
     async fetchHoselistData() {
       const res = await GetHomeHoselist(this.currentPage)
-      console.log(res);
       this.houeseList.push(...res.data)
       this.currentPage ++
     },
