@@ -9,7 +9,8 @@ const useMainStore = defineStore("main", {
     token: "",
     //给初始化值
     startDate: startDate,
-    endDate: endDate
+    endDate: endDate,
+    isLoading: false
   }),
 })
 

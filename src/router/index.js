@@ -31,6 +31,13 @@ const routes = [
     meta: {
       hideTaBar: true
     }
+  },
+  {
+    path: "/detail/:id",
+    component: () => import("@/views/detail/detail.vue"),
+    meta: {
+      hideTaBar: true
+    }
   }
 ]
 
