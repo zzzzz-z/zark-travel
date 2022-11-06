@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" ref="homeRef">
     <nav-bar></nav-bar>
     <div class="banner">
       <img src="@/assets/img/home/banner.webp" alt="" />
@@ -12,9 +12,13 @@
     <home-content></home-content>
   </div>
 </template>
-
+<script>
+export default {
+  name:"home"
+}
+</script>
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onActivated, ref, watch } from "vue";
 import useHomeStore from "@/stores/modules/home";
 import navBar from "./cpns/nav-bar.vue";
 import HomeSearch from "./cpns/home-search.vue";
@@ -30,7 +34,8 @@ homeStore.fetchHoselistData();
 
 //滚动到底部自动加载更多
 //监听windows窗口的滚动
-const { isReachBottom, scrollTop } =  useScroll()
+const homeRef = ref()
+const { isReachBottom, scrollTop } =  useScroll(homeRef)
 watch(isReachBottom, (newValue) => {
   if (newValue) {
     homeStore.fetchHoselistData().then(() => {
@@ -43,11 +48,21 @@ watch(isReachBottom, (newValue) => {
 const isShowSearchBar = computed(() => {
   return scrollTop.value >= 350
 })
+
+//跳转回到home时，保留原来位置
+onActivated(() => {
+  homeRef.value?.scrollTo({
+    top: scrollTop.value
+  })
+})
 </script>
 
 <style lang="less" scoped>
 .home {
+  box-sizing: border-box;
   padding-bottom: 60px;
+  height: 100vh;
+  overflow-y: auto;
   .banner {
     img {
       width: 100%;

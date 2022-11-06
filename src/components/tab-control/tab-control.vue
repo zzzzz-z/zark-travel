@@ -23,6 +23,12 @@ const itemClick = (index) => {
   currentIndex.value = index
   emit('tabitemClick', index)
 }
+const setCurrentIndex = (index) => {
+  currentIndex.value = index
+}
+defineExpose({
+  setCurrentIndex
+})
 </script>
 
 <style lang="less" scoped>

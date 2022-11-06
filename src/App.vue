@@ -1,17 +1,24 @@
 <template>
   <div class="app">
-    <router-view />
+    <!-- <keep-alive include="home">
+      <router-view />
+    </keep-alive> -->
+    <router-view v-slot="props">
+      <keep-alive include="home">
+        <component :is="props.Component" />
+      </keep-alive>
+    </router-view>
     <tab-bar v-if="!route.meta.hideTaBar"></tab-bar>
     <loading></loading>
   </div>
 </template>
 
 <script setup>
-import tabBar from '@/components/tabBar/tabBar.vue'
-import Loading from '@/components/loading/loading.vue'
+import tabBar from "@/components/tabBar/tabBar.vue";
+import Loading from "@/components/loading/loading.vue";
 
-import { useRoute } from 'vue-router'
-const route = useRoute()
+import { useRoute } from "vue-router";
+const route = useRoute();
 </script>
 
 <style scoped>
