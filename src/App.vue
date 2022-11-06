@@ -8,7 +8,7 @@
         <component :is="props.Component" />
       </keep-alive>
     </router-view>
-    <tab-bar v-if="!route.meta.hideTaBar"></tab-bar>
+    <tab-bar v-show="!route.meta.hideTaBar"></tab-bar>
     <loading></loading>
   </div>
 </template>
